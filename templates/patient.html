@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Profile | Oncology Dashboard{% endblock %}
+
+{% block content %}
+<header class="patient-header">
+    <button class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </button>
+    <h1>Patient ID: {{ patient.id }}</h1>
+</header>
+
+<div class="patient-profile">
+    <!-- Left Column (Patient Data - now with two sub-columns) -->
+    <div class="profile-column patient-data">
+        <div class="section-title">
+            <h2>Patient Information</h2>
+        </div>
+        
+        <div class="data-columns">
+            <!-- Left Sub-Column -->
+            <div class="data-subcolumn">
+                <div class="data-field">
+                    <label>Age</label>
+                    <div class="editable-field">{{ patient.age }} years</div>
+                </div>
+                
+                <div class="data-field">
+                    <label>Gender</label>
+                    <div class="editable-field">{{ patient.gender }}</div>
+                </div>
+                
+                <div class="data-field">
+                    <label>BMI</label>
+                    <div class="editable-field">{{ patient.bmi_all }} kg/m²</div>
+                </div>
+                
+                <div class="data-field">
+                    <label>ASA Class</label>
+                    <div class="editable-field">{{ patient.asa_classification }}</div>
+                </div>
+                
+                <div class="data-field">
+                    <label>CCI Score</label>
+                    <div class="editable-field">{{ patient.cci }}</div>
+                </div>
+            </div>
+            
+            <!-- Right Sub-Column -->
+            <div class="data-subcolumn">
+                <div class="data-field">
+                    <label>Tumor Size</label>
+                    <div class="editable-field">{{ patient.tumor_size }} cm</div>
+                </div>
+                
+                <div class="data-field">
+                    <label>Surgery Time</label>
+                    <div class="editable-field">{{ patient.surgical_duration }} min</div>
+                </div>
+                
+                <div class="data-field">
+                    <label>Approach</label>
+                    <div class="editable-field">{{ patient.surgical_approach }}</div>
+                </div>
+                
+                <div class="data-field">
+                    <label>Lymphadenectomy</label>
+                    <div class="editable-field">{{ patient.lymphadenectomy }}</div>
+                </div>
+                
+                <div class="data-field">
+                    <label>Pathological Stage</label>
+                    <div class="editable-field">{{ patient.pt }}, {{ patient.pn }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right Column (Prediction) -->
+    <div class="profile-column prediction-data">
+        <div class="section-title">
+            <h2>Complication Prediction</h2>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-placeholder">
+                <i class="fas fa-chart-bar chart-icon"></i>
+                <p>Complication probability visualization will appear here</p>
+            </div>
+        </div>
+        
+        <div class="prediction-feedback">
+            <h3>Clinical Assessment</h3>
+            <p>Does this prediction match your evaluation?</p>
+            
+            <div class="feedback-buttons">
+                <button class="feedback-button yes">
+                    <i class="fas fa-check-circle"></i> Yes
+                </button>
+                <button class="feedback-button no">
+                    <i class="fas fa-times-circle"></i> No
+                </button>
+                <button class="feedback-button other">
+                    <i class="fas fa-question-circle"></i> Unsure
+                </button>
+            </div>
+            
+            <div class="comment-section">
+                <label for="comment">Clinical Notes</label>
+                <textarea id="comment" placeholder="Document your clinical reasoning..."></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

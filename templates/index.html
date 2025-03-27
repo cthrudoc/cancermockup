@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Patient List{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Patient List</h1>
+    <div class="search-container">
+        <i class="fas fa-search"></i>
+        <form method="get" action="{{ url_for('index') }}">
+            <input type="text" name="search" placeholder="Search patients..." 
+                   value="{{ search_query }}" id="searchInput">
+        </form>
+    </div>
+</header>
+
+<div class="patient-table-container">
+    <table class="patient-table">
+        <thead>
+            <tr>
+                <th class="sortable {% if sort_by == 'id' %}sorted-{{ sort_order }}{% endif %}" 
+                    data-sort="id">
+                    ID {% if sort_by == 'id' %}
+                        <i class="fas fa-chevron-{% if sort_order == 'asc' %}up{% else %}down{% endif %}"></i>
+                    {% endif %}
+                </th>
+                <th class="sortable {% if sort_by == 'age' %}sorted-{{ sort_order }}{% endif %}" 
+                    data-sort="age">
+                    Age {% if sort_by == 'age' %}
+                        <i class="fas fa-chevron-{% if sort_order == 'asc' %}up{% else %}down{% endif %}"></i>
+                    {% endif %}
+                </th>
+                <th>Gender</th>
+                <th>BMI</th>
+                <th>Surgery Time</th>
+                <th>Approach</th>
+                <th>ASA</th>
+                <th>Tumor Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients.items %}
+            <tr class="patient-row" onclick="window.location='{{ url_for('patient_detail', patient_id=patient.id) }}'">
+                <td>{{ patient.id }}</td>
+                <td>{{ patient.age }}</td>
+                <td>{{ patient.gender }}</td>
+                <td>{{ patient.bmi_all }}</td>
+                <td>{{ patient.surgical_duration }} min</td>
+                <td>{{ patient.surgical_approach }}</td>
+                <td>{{ patient.asa_classification }}</td>
+                <td>{{ patient.tumor_size }} cm</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
+    {% if patients.has_prev %}
+        <a href="{{ url_for('index', page=patients.prev_num, search=search_query) }}" 
+           class="pagination-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+    {% else %}
+        <button class="pagination-button" disabled>
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    {% endif %}
+
+    {% for page_num in patients.iter_pages() %}
+        {% if page_num %}
+            <a href="{{ url_for('index', page=page_num, search=search_query) }}" 
+               class="pagination-button {% if page_num == patients.page %}active{% endif %}">
+                {{ page_num }}
+            </a>
+        {% else %}
+            <span class="pagination-ellipsis">...</span>
+        {% endif %}
+    {% endfor %}
+
+    {% if patients.has_next %}
+        <a href="{{ url_for('index', page=patients.next_num, search=search_query) }}" 
+           class="pagination-button">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    {% else %}
+        <button class="pagination-button" disabled>
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    {% endif %}
+</div>
+{% endblock %}
