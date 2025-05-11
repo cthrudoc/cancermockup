@@ -5,6 +5,9 @@
 {% block content %}
 <div class="form-container">
     <h1>Add New Patient</h1>
+    <a href="{{ url_for('index') }}" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
     
     <form method="POST" action="{{ url_for('new_patient') }}">
         <!-- Patient Information Section -->
@@ -20,12 +23,12 @@
             
             <div class="form-group">
                 <label for="weight">Weight (kg)</label>
-                <input type="number" step="0.1" id="weight" name="weight" required>
+                <input type="number" step="0.1" id="weight" name="weight" value="70" required>
             </div>
             
             <div class="form-group">
                 <label for="height">Height (cm)</label>
-                <input type="number" step="0.1" id="height" name="height" min="100" max="250" required>
+                <input type="number" step="0.1" id="height" name="height" min="100" max="250" value="170.0" required>
             </div>
 
             <div class="form-group">
@@ -65,7 +68,7 @@
     
             <div class="form-group">
                 <label for="age">Age at Operation</label>
-                <input type="number" id="age" name="age" min="18" max="120" required>
+                <input type="number" id="age" name="age" min="18" max="120" value="24" required>
             </div>
             
             <div class="form-group">
@@ -133,6 +136,15 @@
             <div class="form-group">
                 <label for="cycles">Number of Cycles</label>
                 <input type="number" id="cycles" name="cycles" min="0" max="12" value="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="model">Prediction Model</label>
+                <select id="model" name="model" required>
+                    <option value="Random Forest">Random Forest</option>
+                    <option value="XGBoost" selected>XGBoost</option>
+                    <option value="CatBoost">CatBoost</option>
+                </select>
             </div>
         </div>
         

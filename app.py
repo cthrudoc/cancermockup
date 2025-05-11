@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from models import db, Patient
+from models import db, Patient, Prediction
 import os 
 from ml_models import MLModel  
 from flask_migrate import Migrate
@@ -125,6 +125,9 @@ def create_app():
     def new_patient():
         if request.method == 'POST':
             try:
+
+                print("[DEBUG] Starting patient creation.")
+
                 # Create new patient
                 patient = Patient(
                     gender=request.form['gender'],
@@ -147,8 +150,13 @@ def create_app():
                 )
                 db.session.add(patient)
                 db.session.flush()  # Get the ID before commit
-                
+
+                print(f"[DEBUG] Patient created with ID {patient.id}")
+
                 # Make prediction
+
+                print("[DEBUG] Preparing input data...")
+
                 input_data = {
                     'WIEK W DNIU OPERACJI': int(request.form['age']),
                     'PŁEĆ': request.form['gender'],
@@ -169,8 +177,14 @@ def create_app():
                     'CTH przedoperacyjna': request.form['cth_preop'],
                     'LICZBA CYKLI': int(request.form['cycles'])
                 }
+                
+                print("[DEBUG] Input data revieved :")
+                print(f'{input_data}')
+
                 model_name = request.form.get('model', 'Random Forest')
+                print(f"[DEBUG] Attempting prediction with {model_name}")
                 result = ml_model.predict(input_data, model_name)
+                print("[DEBUG] Prediction successful")
                 
                 # Store prediction
                 prediction = Prediction(
