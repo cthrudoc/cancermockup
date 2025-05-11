@@ -19,13 +19,21 @@ class MLModel :
 
             for name, file in model_files.items():
                 with open(file, 'rb') as f:
-                    models[name] = pickle.load(f)
-
+                    self.models[name] = pickle.load(f)
+                    # Store feature names from the first model
+                    '''
+                    if not self.feature_names and hasattr(self.models[name], 'feature_names_in_'):
+                        self.feature_names = list(self.models[name].feature_names_in_)
+                    '''
             with open('model_files/preprocessing_objects.pkl', 'rb') as f:
                 preprocessing = pickle.load(f)
                 self.imputer = preprocessing['imputer']
                 self.label_encoders = preprocessing['label_encoders']
                 self.feature_names = preprocessing['feature_names']
+                '''
+                if not self.feature_names and 'feature_names' in preprocessing:
+                    self.feature_names = preprocessing['feature_names']
+                '''
 
             print("Modele i obiekty preprocessingu zostały wczytane pomyślnie!")
 
@@ -40,6 +48,29 @@ class MLModel :
         if not self.loaded:
             if not self.load_models():
                 raise Exception("Models failed to load")
+            
+        # [DEBUG] Does this shit work at all????
+        input_data = {
+        'WIEK W DNIU OPERACJI': 65,          # wiek w latach (wartości numeryczne)
+        'PŁEĆ': 'M',                         # 'M' lub 'K'
+        'waga': 70.0,                        # waga w kg (wartości numeryczne)
+        'wzrost': 175.0,                     # wzrost w cm (wartości numeryczne)
+        'BMI': 22.9,                         # BMI (wartości numeryczne)
+        'CRP': 105.2,                          # CRP (wartości numeryczne)
+        'Alb': 4.2,                          # Alb (wartości numeryczne)
+        'WCC': 7.5,                          # WCC (wartości numeryczne)
+        'NEU': 4.5,                          # NEU (wartości numeryczne)
+        'białko całkowite': 6.9,             # białko całkowite (wartości numeryczne)
+        'pT': 'T2',                          # stadium T (wartości kategoryczne)
+        'pN': 'N0',                          # stadium N (wartości kategoryczne)
+        'pM': 'M0',                          # stadium M (wartości kategoryczne)
+        'PNI (perineural invasion)': 0.2,     # PNI (wartości numeryczne 0-1)
+        'GRADING': 'G2',                     # stopień zróżnicowania (wartości kategoryczne)
+        'Lauren': 'jelitowy',                # typ Lauren (wartości kategoryczne)
+        'CTH przedoperacyjna': 'tak',         # chemioterapia przedoperacyjna (wartości kategoryczne)
+        'LICZBA CYKLI': 4.0,                 # liczba cykli chemioterapii (wartości numeryczne)
+}
+
 
         # 4. Przetwarzanie danych i predykcja
         try:

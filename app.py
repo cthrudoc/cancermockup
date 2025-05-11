@@ -3,6 +3,7 @@ from models import db, Patient, Prediction
 import os 
 from ml_models import MLModel  
 from flask_migrate import Migrate
+import traceback
 
 ml_model = MLModel()
 
@@ -178,11 +179,27 @@ def create_app():
                     'LICZBA CYKLI': int(request.form['cycles'])
                 }
                 
-                print("[DEBUG] Input data revieved :")
+                print("[DEBUG] Input data recieved :")
                 print(f'{input_data}')
 
                 model_name = request.form.get('model', 'Random Forest')
                 print(f"[DEBUG] Attempting prediction with {model_name}")
+
+                # print("DEBUG - Features expected by model:", ml_model.feature_names)
+                # print("DEBUG - Features being sent:", list(input_data.keys()))
+
+                # Ensure all features are in correct order
+                '''
+                ordered_input = []
+                for feature in ml_model.feature_names:
+                    if feature in input_data:
+                        ordered_input.append(input_data[feature])
+                    else:
+                        print(f"Missing feature: {feature}")
+                        ordered_input.append(None)  # Or appropriate default
+
+                print("DEBUG - Ordered input:", ordered_input)
+                '''
                 result = ml_model.predict(input_data, model_name)
                 print("[DEBUG] Prediction successful")
                 
@@ -201,6 +218,8 @@ def create_app():
                 return redirect(url_for('patient_detail', patient_id=patient.id))
                 
             except Exception as e:
+                print(f"[!!!] [ERROR] : {e}")
+                print("[DEBUG] Full error:", traceback.format_exc())
                 db.session.rollback()
                 flash(f'Error: {str(e)}', 'danger')
                 return redirect(url_for('new_patient'))
