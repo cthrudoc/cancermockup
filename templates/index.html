@@ -12,6 +12,11 @@
                    value="{{ search_query }}" id="searchInput">
         </form>
     </div>
+    <div class="actions">
+        <a href="{{ url_for('new_patient') }}" class="btn-add">
+            <i class="fas fa-plus"></i> Add New Patient
+        </a>
+    </div>
 </header>
 
 <div class="patient-table-container">
@@ -24,31 +29,28 @@
                         <i class="fas fa-chevron-{% if sort_order == 'asc' %}up{% else %}down{% endif %}"></i>
                     {% endif %}
                 </th>
-                <th class="sortable {% if sort_by == 'age' %}sorted-{{ sort_order }}{% endif %}" 
-                    data-sort="age">
-                    Age {% if sort_by == 'age' %}
-                        <i class="fas fa-chevron-{% if sort_order == 'asc' %}up{% else %}down{% endif %}"></i>
-                    {% endif %}
-                </th>
                 <th>Gender</th>
+                <th>Weight (kg)</th>
+                <th>Height (cm)</th>
                 <th>BMI</th>
-                <th>Surgery Time</th>
-                <th>Approach</th>
-                <th>ASA</th>
-                <th>Tumor Size</th>
+                <th>CRP</th>
+                <th>Albumin</th>
+                <th>pT Stage</th>
+                <th>pN Stage</th>
             </tr>
         </thead>
         <tbody>
             {% for patient in patients.items %}
             <tr class="patient-row" onclick="window.location='{{ url_for('patient_detail', patient_id=patient.id) }}'">
                 <td>{{ patient.id }}</td>
-                <td>{{ patient.age }}</td>
                 <td>{{ patient.gender }}</td>
-                <td>{{ patient.bmi_all }}</td>
-                <td>{{ patient.surgical_duration }} min</td>
-                <td>{{ patient.surgical_approach }}</td>
-                <td>{{ patient.asa_classification }}</td>
-                <td>{{ patient.tumor_size }} cm</td>
+                <td>{{ patient.weight }}</td>
+                <td>{{ patient.height }}</td>
+                <td>{{ patient.bmi }}</td>
+                <td>{{ patient.CRP }}</td>
+                <td>{{ patient.Alb }}</td>
+                <td>{{ patient.pT }}</td>
+                <td>{{ patient.pN }}</td>
             </tr>
             {% endfor %}
         </tbody>

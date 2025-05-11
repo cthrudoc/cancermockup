@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Predict Complications | Oncology Dashboard{% endblock %}
+
+{% block content %}
+<header class="patient-header">
+    <button class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i> Back to Patient
+    </button>
+    <h1>Complication Risk Prediction for Patient {{ patient.id }}</h1>
+</header>
+
+<div class="prediction-form-container">
+    <form method="POST" class="prediction-form">
+        <input type="hidden" name="patient_id" value="{{ patient.id }}">
+        
+        <div class="form-section">
+            <h2>Patient Measurements</h2>
+            <div class="form-columns">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" step="0.1" id="weight" name="weight" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" step="0.1" id="height" name="height" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bmi">BMI</label>
+                        <input type="number" step="0.1" id="bmi" name="bmi" required>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="crp">CRP</label>
+                        <input type="number" step="0.1" id="crp" name="crp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="alb">Albumin</label>
+                        <input type="number" step="0.1" id="alb" name="alb" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wcc">WCC</label>
+                        <input type="number" step="0.1" id="wcc" name="wcc" required>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="neu">NEU</label>
+                        <input type="number" step="0.1" id="neu" name="neu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="total_protein">Total Protein</label>
+                        <input type="number" step="0.1" id="total_protein" name="total_protein" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pni">PNI (0 or 1)</label>
+                        <input type="number" min="0" max="1" id="pni" name="pni" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Tumor Characteristics</h2>
+            <div class="form-columns">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="pT">pT Stage</label>
+                        <select id="pT" name="pT" required>
+                            <option value="T1">T1</option>
+                            <option value="T2">T2</option>
+                            <option value="T3">T3</option>
+                            <option value="T4">T4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pN">pN Stage</label>
+                        <select id="pN" name="pN" required>
+                            <option value="N0">N0</option>
+                            <option value="N1">N1</option>
+                            <option value="N2">N2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="pM">pM Stage</label>
+                        <select id="pM" name="pM" required>
+                            <option value="M0">M0</option>
+                            <option value="M1">M1</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="grading">Grading</label>
+                        <select id="grading" name="grading" required>
+                            <option value="G1">G1</option>
+                            <option value="G2">G2</option>
+                            <option value="G3">G3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="lauren">Lauren Type</label>
+                        <select id="lauren" name="lauren" required>
+                            <option value="jelitowy">Intestinal</option>
+                            <option value="rozsiany">Diffuse</option>
+                            <option value="mieszany">Mixed</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Treatment Information</h2>
+            <div class="form-columns">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="cth_preop">Preoperative Chemotherapy</label>
+                        <select id="cth_preop" name="cth_preop" required>
+                            <option value="tak">Yes</option>
+                            <option value="nie">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="cycles_number">Number of Cycles</label>
+                        <input type="number" min="0" id="cycles_number" name="cycles_number" required>
+                    </div>
+                </div>
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="model">Prediction Model</label>
+                        <select id="model" name="model">
+                            <option value="Random Forest">Random Forest</option>
+                            <option value="XGBoost">XGBoost</option>
+                            <option value="CatBoost">CatBoost</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="submit-button">
+                <i class="fas fa-calculator"></i> Calculate Risk
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
