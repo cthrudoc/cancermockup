@@ -49,7 +49,9 @@ class MLModel :
             if not self.load_models():
                 raise Exception("Models failed to load")
             
-        # [DEBUG] Does this shit work at all????
+            
+        # [DEBUG] 
+        '''
         input_data = {
         'WIEK W DNIU OPERACJI': 65,          # wiek w latach (wartości numeryczne)
         'PŁEĆ': 'M',                         # 'M' lub 'K'
@@ -70,7 +72,7 @@ class MLModel :
         'CTH przedoperacyjna': 'tak',         # chemioterapia przedoperacyjna (wartości kategoryczne)
         'LICZBA CYKLI': 4.0,                 # liczba cykli chemioterapii (wartości numeryczne)
 }
-
+'''
 
         # 4. Przetwarzanie danych i predykcja
         try:
