@@ -126,26 +126,37 @@ class MLModel :
             # Dodatkowe informacje
             print("\nTop 3 najważniejsze czynniki wpływające na predykcję:")
             top_vars = []
+            def _normalize_importance(importance_values):
+                total = sum(abs(x) for x in importance_values.values())
+                return {k: (v/total)*100 for k, v in importance_values.items()}
+            
+            top_factors = []
             if hasattr(selected_model, 'feature_importances_'):
-                importances = pd.Series(selected_model.feature_importances_, index=self.feature_names)
-                top_features = importances.sort_values(ascending=False).head(3)
-                for i, (feature, importance) in enumerate(top_features.items(), 1):
-                    print(f"{i}. {feature}: {importance:.4f}")
-                    top_vars.append(str(f"{i}. {feature}: {importance:.4f}"))
-                    
+                importances = dict(zip(self.feature_names, selected_model.feature_importances_))
+                importances = _normalize_importance(importances)
+                top_features = sorted(importances.items(), key=lambda x: x[1], reverse=True)[:3]
+                top_factors = [f"{feature}: {importance:.2f}%" for feature, importance in top_features]
+                
             elif hasattr(selected_model, 'coef_'):
-                coef = pd.Series(selected_model.coef_[0], index=self.feature_names)
-                top_features = coef.abs().sort_values(ascending=False).head(3)
-                for i, (feature, coef_value) in enumerate(top_features.items(), 1):
-                    print(f"{i}. {feature}: {coef_value:.4f}")
-                    top_vars.append(str(print(f"{i}. {feature}: {coef_value:.4f}")))
-
+                coef = dict(zip(self.feature_names, selected_model.coef_[0]))
+                coef = _normalize_importance(coef)
+                top_features = sorted(coef.items(), key=lambda x: abs(x[1]), reverse=True)[:3]
+                top_factors = [f"{feature}: {abs(importance):.2f}%" for feature, importance in top_features]
+            
+            # For CatBoost-style raw values
+            elif hasattr(selected_model, 'get_feature_importance'):
+                raw_importances = selected_model.get_feature_importance()
+                importances = dict(zip(self.feature_names, raw_importances))
+                importances = _normalize_importance(importances)
+                top_features = sorted(importances.items(), key=lambda x: x[1], reverse=True)[:3]
+                top_factors = [f"{feature}: {importance:.2f}%" for feature, importance in top_features]
+            
             return {
-                'probability' : probability , 
-                'model_used' : selected_model_name, 
-                'interpretation' : interpretation,
-                'vars_importance' : top_vars
-                }
+                'probability': probability,
+                'model_used': selected_model_name,
+                'interpretation': interpretation,
+                'vars_importance': top_factors
+            }
         
 
         except Exception as e:
