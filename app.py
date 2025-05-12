@@ -76,7 +76,8 @@ def create_app():
     @app.route('/patient/<int:patient_id>')
     def patient_detail(patient_id):
         patient = Patient.query.get_or_404(patient_id)
-        return render_template('patient.html', patient=patient)
+        predictions = patient.predictions
+        return render_template('patient.html', patient=patient, predictions=predictions)
     
     @app.route('/patient/<int:patient_id>/predict', methods=['GET', 'POST'])
     def predict_complications(patient_id):
@@ -226,6 +227,16 @@ def create_app():
         
         # GET request - show empty form
         return render_template('new_patient.html')
+
+    @app.route('/prediction/<int:prediction_id>/feedback', methods=['POST'])
+    def save_feedback(prediction_id):
+        prediction = Prediction.query.get_or_404(prediction_id)
+        if request.method == 'POST':
+            prediction.clinician_agreement = request.form.get('agreement')
+            prediction.clinician_notes = request.form.get('clinician_notes', '')
+            db.session.commit()
+            flash('Feedback saved successfully', 'success')
+        return redirect(url_for('patient_detail', patient_id=prediction.patient_id))
 
     return app
 

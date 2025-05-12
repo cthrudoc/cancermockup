@@ -75,9 +75,10 @@
 
             <!-- Right Column (Prediction) -->
             <div class="prediction-data">
-                {% if patient.predictions %}
-                    {% for prediction in patient.predictions %}
+                {% if predictions %}
+                    {% for prediction in predictions %}
                     <div class="prediction-result">
+                        <!-- Prediction Display -->
                         <div class="risk-level risk-{{ prediction.interpretation|lower|replace(' ', '-') }}">
                             <h3>{{ prediction.interpretation }} RISK</h3>
                             <div class="probability-gauge">
@@ -97,6 +98,36 @@
                             </ul>
                         </div>
                         {% endif %}
+                        
+                        <!-- Feedback Form - MUST BE INSIDE THE PREDICTION LOOP -->
+                        <div class="clinician-feedback">
+                            <h4>Clinical Assessment</h4>
+                            <form method="POST" action="{{ url_for('save_feedback', prediction_id=prediction.id) }}">
+                                <div class="feedback-buttons">
+                                    <button type="submit" name="agreement" value="agree" 
+                                            class="{% if prediction.clinician_agreement == 'agree' %}active{% endif %}">
+                                        <i class="fas fa-check-circle"></i> Agree
+                                    </button>
+                                    <button type="submit" name="agreement" value="disagree"
+                                            class="{% if prediction.clinician_agreement == 'disagree' %}active{% endif %}">
+                                        <i class="fas fa-times-circle"></i> Disagree
+                                    </button>
+                                    <button type="submit" name="agreement" value="ambivalent"
+                                            class="{% if prediction.clinician_agreement == 'ambivalent' %}active{% endif %}">
+                                        <i class="fas fa-question-circle"></i> Ambivalent
+                                    </button>
+                                </div>
+                                
+                                <div class="feedback-notes">
+                                    <textarea name="clinician_notes" placeholder="Enter your clinical reasoning...">
+                                        {{ prediction.clinician_notes or '' }}
+                                    </textarea>
+                                    <button type="submit" class="btn-save-notes">
+                                        <i class="fas fa-save"></i> Save Notes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     {% endfor %}
                 {% else %}

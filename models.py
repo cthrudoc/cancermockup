@@ -21,6 +21,8 @@ class Patient(db.Model):
     Lauren = db.Column(db.String(10), nullable=False)       # typ Lauren (wartości kategoryczne)
     CTH_preop = db.Column(db.String(10), nullable=False)    # chemioterapia przedoperacyjna (wartości kategoryczne)
     cycles_number = db.Column(db.Integer, nullable=False)   # liczba cykli chemioterapii (wartości numeryczne)
+    
+    predictions = db.relationship('Prediction', backref='patient', lazy=True)
 
     def __repr__(self):
         return f'<Patient {self.id} - {self.age}y {self.gender}>'
@@ -32,9 +34,12 @@ class Prediction(db.Model):
     model_used = db.Column(db.String(50), nullable=False)
     interpretation = db.Column(db.String(50), nullable=False)
     top_factors = db.Column(db.JSON)  # Stores list of important factors
+
+    clinician_agreement = db.Column(db.String(20))  # 'agree', 'disagree', 'ambivalent'
+    clinician_notes = db.Column(db.Text)
     
     # Relationship
-    patient = db.relationship('Patient', backref=db.backref('predictions', lazy=True))
+    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
     
     def __repr__(self):
         return f'<Prediction {self.id} for Patient {self.patient_id}>'

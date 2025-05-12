@@ -41,4 +41,18 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
+
+    // Make feedback buttons interactive
+    document.querySelectorAll('.feedback-buttons button').forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from siblings
+            this.parentNode.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Add to clicked button
+            this.classList.add('active');
+        });
+    });
+
+
 });
