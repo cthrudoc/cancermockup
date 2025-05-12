@@ -530,6 +530,8 @@ h1 {
     transform: translateY(-2px);
 }
 
+
+
 /* Prediction Results Styles */
 .prediction-result {
     padding: 20px;
@@ -562,43 +564,6 @@ h1 {
     color: var(--success-color);
 }
 
-.probability-gauge {
-    height: 30px;
-    background-color: var(--light-gray);
-    border-radius: 15px;
-    margin: 15px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.gauge-fill {
-    height: 100%;
-    border-radius: 15px;
-    transition: width 0.5s ease;
-}
-
-.risk-high .gauge-fill {
-    background-color: var(--danger-color);
-}
-
-.risk-moderate .gauge-fill {
-    background-color: var(--warning-color);
-}
-
-.risk-low .gauge-fill {
-    background-color: var(--success-color);
-}
-
-.probability-value {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
 .model-info {
     margin-bottom: 15px;
     padding-bottom: 15px;
@@ -627,25 +592,6 @@ h1 {
 
 .predict-button:hover {
     background-color: #2980b9;
-}
-
-.gauge-fill {
-    height: 100%;
-    border-radius: 15px;
-    transition: width 0.5s ease;
-    max-width: 100%; /* Ensure it doesn't overflow */
-}
-
-.risk-high .gauge-fill {
-    background-color: var(--danger-color);
-}
-
-.risk-moderate .gauge-fill {
-    background-color: var(--warning-color);
-}
-
-.risk-low .gauge-fill {
-    background-color: var(--success-color);
 }
 
 .form-header {
@@ -735,10 +681,40 @@ h1 {
     cursor: pointer;
 }
 
-/* Updated Gauge Styles */
+
+/* Number styling */
+.probability-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
+    text-shadow: 
+        -1px -1px 0 #fff,  
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff;  /* White outline effect */
+    mix-blend-mode: normal;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.risk-high .probability-value,
+.risk-moderate .probability-value {
+    color: #fff;
+    text-shadow: 
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;  /* Black outline for light text */
+}
+
+/* === GAUGE - FINAL WORKING VERSION === */
 .probability-gauge {
     height: 30px;
-    background: #f0f0f0;
+    background: #e0e0e0;
     border-radius: 15px;
     margin: 15px 0;
     position: relative;
@@ -746,22 +722,19 @@ h1 {
 }
 
 .gauge-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
+    width: 0%;
     border-radius: 15px;
     transition: width 0.5s ease;
+    z-index: 1;
 }
 
-.risk-low .gauge-fill {
-    background-color: #2ecc71; /* Green */
-}
-
-.risk-moderate .gauge-fill {
-    background-color: #f39c12; /* Orange */
-}
-
-.risk-high .gauge-fill {
-    background-color: #e74c3c; /* Red */
-}
+.risk-low .gauge-fill { background: linear-gradient(to right, #4CAF50, #2E7D32); }
+.risk-moderate .gauge-fill { background: linear-gradient(to right, #FFC107, #FF9800); }
+.risk-high .gauge-fill { background: linear-gradient(to right, #F44336, #C62828); }
 
 .probability-value {
     position: absolute;
@@ -769,29 +742,24 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
     font-weight: bold;
+    font-size: 14px;
+    z-index: 2;
+    color: white;
+    text-shadow: 
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+.risk-low .probability-value {
     color: #000;
-    text-shadow: 0 0 2px rgba(255,255,255,0.7);
-    mix-blend-mode: difference;
+    text-shadow: 
+        -1px -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff;
 }
 
-/* Risk level backgrounds */
-.risk-level {
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-.risk-low {
-    background-color: rgba(46, 204, 113, 0.1);
-    border-left: 4px solid #2ecc71;
-}
-
-.risk-moderate {
-    background-color: rgba(243, 156, 18, 0.1);
-    border-left: 4px solid #f39c12;
-}
-
-.risk-high {
-    background-color: rgba(231, 76, 60, 0.1);
-    border-left: 4px solid #e74c3c;
-}
+.probability-gauge { outline: 1px solid green; }
+.gauge-fill { outline: 1px solid blue; }

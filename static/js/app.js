@@ -53,6 +53,18 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
+    
+    function calculateBMI() {
+    const weight = parseFloat(document.getElementById('weight').value);
+    const height = parseFloat(document.getElementById('height').value) / 100; // Convert cm to m
+    
+    if (weight && height) {
+        const bmi = weight / (height * height);
+        document.getElementById('bmi').value = bmi.toFixed(1);
+    } else {
+        alert('Please enter both weight and height first');
+    }
+}
 
 
 });
