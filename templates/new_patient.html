@@ -65,6 +65,22 @@
                 <label for="total_protein">Total Protein (g/dL)</label>
                 <input type="number" step="0.1" id="total_protein" name="total_protein" min="1" max="15" required>
             </div>
+
+            <div class="form-group">
+                <label for="leukocytes">Total Leukocytes Count (×10⁹/L)</label>
+                <input type="number" step="0.1" id="leukocytes" name="leukocytes" min="0" max="100">
+            </div>
+
+            <div class="form-group">
+                <label for="pni_float">PNI Value</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input type="number" step="0.01" id="pni_float" name="pni_float" min="0" max="100">
+                    <button type="button" class="btn-back" onclick="calculatePNI()" style="padding: 8px 12px;">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                </div>
+            </div>
+
         </div>
         
         <!-- Prediction Parameters Section -->
@@ -181,6 +197,20 @@
     } else {
         alert('Please enter both weight and height first');
     }}
+
+function calculatePNI() {
+    const albumin = parseFloat(document.getElementById('alb').value);
+    const leukocytes = parseFloat(document.getElementById('leukocytes').value);
+    
+    if (albumin && leukocytes) {
+        // PNI = 10*(albumin) + 0.005*(total lymphocytes)
+        // Convert leukocytes from ×10⁹/L to mm³ (1 ×10⁹/L = 1000/mm³)
+        const pni = (10 * albumin) + (0.005 * leukocytes * 1000);
+        document.getElementById('pni_float').value = pni.toFixed(1);
+    } else {
+        alert('Please enter both albumin and leukocytes values first');
+    }
+}
 
 </script>
 

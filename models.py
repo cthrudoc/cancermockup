@@ -22,6 +22,9 @@ class Patient(db.Model):
     CTH_preop = db.Column(db.String(10), nullable=False)    # chemioterapia przedoperacyjna (wartości kategoryczne)
     cycles_number = db.Column(db.Integer, nullable=False)   # liczba cykli chemioterapii (wartości numeryczne)
     
+    leukocytes = db.Column(db.Float, nullable=True)        # NEW: total leukocytes count (nullable)
+    pni_float = db.Column(db.Float, nullable=True)         # NEW: float PNI value (nullable)
+    
     predictions = db.relationship('Prediction', backref='patient', lazy=True)
 
     def __repr__(self):

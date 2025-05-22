@@ -130,6 +130,9 @@ def create_app():
 
                 print("[DEBUG] Starting patient creation.")
 
+                pni_float = request.form.get('pni_float')
+                pni_value = 1 if pni_float and float(pni_float) > 45 else 0
+
                 # Create new patient
                 patient = Patient(
                     gender=request.form['gender'],
@@ -144,12 +147,15 @@ def create_app():
                     pT=request.form['pt'],
                     pN=request.form['pn'],
                     pM=request.form['pm'],
-                    PNI=int(request.form['pni']),
                     GRADING=request.form['grading'],
                     Lauren=request.form['lauren'],
                     CTH_preop=request.form['cth_preop'],
-                    cycles_number=int(request.form['cycles'])
-                )
+                    cycles_number=int(request.form['cycles']),
+                    leukocytes=float(request.form['leukocytes']) if request.form.get('leukocytes') else None, 
+                    pni_float=float(pni_float) if pni_float else None,  
+                    PNI = pni_value,
+                    )
+                    
                 db.session.add(patient)
                 db.session.flush()  # Get the ID before commit
 

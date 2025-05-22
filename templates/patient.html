@@ -175,8 +175,23 @@
                 
                 <div class="data-field">
                     <label>Prognostic Nutritional Index</label>
-                    <div class="editable-field">{{ "Yes" if patient.PNI else "No" }}</div>
+                    <div class="editable-field">{{ "High" if patient.PNI else "Low" }}</div>
                 </div>
+
+                <div class="data-field">
+                    <label>Total Leukocytes</label>
+                    <div class="editable-field">
+                        {{ patient.leukocytes if patient.leukocytes else 'N/A' }} ×10⁹/L
+                    </div>
+                </div>
+
+                <div class="data-field">
+                    <label>PNI Value</label>
+                    <div class="editable-field">
+                        {{ patient.pni_float if patient.pni_float else 'N/A' }}
+                    </div>
+                </div>
+
             </div>
         </div>
         
