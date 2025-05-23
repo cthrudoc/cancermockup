@@ -46,6 +46,28 @@
                     <label>CRP</label>
                     <div class="editable-field">{{ patient.CRP }} mg/L</div>
                 </div>
+
+                        
+                        <div class="section-title" style="margin-top: 30px;">
+                            <h2>Treatment</h2>
+                        </div>
+                        
+                        <div class="data-columns">
+                            <div class="data-subcolumn">
+                                <div class="data-field">
+                                    <label>Pre-op Chemo</label>
+                                    <div class="editable-field">{{ "Yes" if patient.CTH_preop == "tak" else "No" }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="data-subcolumn">
+                                <div class="data-field">
+                                    <label>Cycles</label>
+                                    <div class="editable-field">{{ patient.cycles_number }}</div>
+                                </div>
+                            </div>
+                        </div>
+
             </div> 
 
 
@@ -71,6 +93,63 @@
                     <label>Total Protein</label>
                     <div class="editable-field">{{ patient.total_protein }} g/dL</div>
                 </div>
+
+                            
+                <div class="section-title" style="margin-top: 30px;">
+                    <h2>Tumor Characteristics</h2>
+                </div>
+                
+                <div class="data-columns">
+                    <div class="data-subcolumn">
+                        <div class="data-field">
+                            <label>cT Stage</label>
+                            <div class="editable-field">{{ patient.pT }}</div>
+                        </div>
+                        
+                        <div class="data-field">
+                            <label>cN Stage</label>
+                            <div class="editable-field">{{ patient.pN }}</div>
+                        </div>
+                        
+                        <div class="data-field">
+                            <label>cM Stage</label>
+                            <div class="editable-field">{{ patient.pM }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="data-subcolumn">
+                        <div class="data-field">
+                            <label>Grading</label>
+                            <div class="editable-field">{{ patient.GRADING }}</div>
+                        </div>
+                        
+                        <div class="data-field">
+                            <label>Lauren Type</label>
+                            <div class="editable-field">{{ patient.Lauren }}</div>
+                        </div>
+                        
+                        <div class="data-field">
+                            <label>Prognostic Nutritional Index</label>
+                            <div class="editable-field">{{ "High" if patient.PNI else "Low" }}</div>
+                        </div>
+
+                        <div class="data-field">
+                            <label>Total Leukocytes</label>
+                            <div class="editable-field">
+                                {{ patient.leukocytes if patient.leukocytes else 'N/A' }} ×10⁹/L
+                            </div>
+                        </div>
+
+                        <div class="data-field">
+                            <label>PNI Value</label>
+                            <div class="editable-field">
+                                {{ patient.pni_float if patient.pni_float else 'N/A' }}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
 
             <!-- Right Column (Prediction) -->
@@ -134,86 +213,14 @@
                         <p>No prediction available for this patient</p>
                     </div>
                 {% endif %}
+
+
             </div>
 
         </div>
         
         
 
-        <div class="section-title" style="margin-top: 30px;">
-            <h2>Tumor Characteristics</h2>
-        </div>
-        
-        <div class="data-columns">
-            <div class="data-subcolumn">
-                <div class="data-field">
-                    <label>cT Stage</label>
-                    <div class="editable-field">{{ patient.pT }}</div>
-                </div>
-                
-                <div class="data-field">
-                    <label>cN Stage</label>
-                    <div class="editable-field">{{ patient.pN }}</div>
-                </div>
-                
-                <div class="data-field">
-                    <label>cM Stage</label>
-                    <div class="editable-field">{{ patient.pM }}</div>
-                </div>
-            </div>
-            
-            <div class="data-subcolumn">
-                <div class="data-field">
-                    <label>Grading</label>
-                    <div class="editable-field">{{ patient.GRADING }}</div>
-                </div>
-                
-                <div class="data-field">
-                    <label>Lauren Type</label>
-                    <div class="editable-field">{{ patient.Lauren }}</div>
-                </div>
-                
-                <div class="data-field">
-                    <label>Prognostic Nutritional Index</label>
-                    <div class="editable-field">{{ "High" if patient.PNI else "Low" }}</div>
-                </div>
-
-                <div class="data-field">
-                    <label>Total Leukocytes</label>
-                    <div class="editable-field">
-                        {{ patient.leukocytes if patient.leukocytes else 'N/A' }} ×10⁹/L
-                    </div>
-                </div>
-
-                <div class="data-field">
-                    <label>PNI Value</label>
-                    <div class="editable-field">
-                        {{ patient.pni_float if patient.pni_float else 'N/A' }}
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        
-        <div class="section-title" style="margin-top: 30px;">
-            <h2>Treatment</h2>
-        </div>
-        
-        <div class="data-columns">
-            <div class="data-subcolumn">
-                <div class="data-field">
-                    <label>Pre-op Chemo</label>
-                    <div class="editable-field">{{ "Yes" if patient.CTH_preop == "tak" else "No" }}</div>
-                </div>
-            </div>
-            
-            <div class="data-subcolumn">
-                <div class="data-field">
-                    <label>Cycles</label>
-                    <div class="editable-field">{{ patient.cycles_number }}</div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 </div>

@@ -179,46 +179,37 @@ def create_app():
                     'pT': request.form['pt'],
                     'pN': request.form['pn'],
                     'pM': request.form['pm'],
-                    'PNI (perineural invasion)': int(request.form['pni']),
+                    'PNI (perineural invasion)': pni_value,  # Use the calculated binary PNI value
                     'GRADING': request.form['grading'],
                     'Lauren': request.form['lauren'],
                     'CTH przedoperacyjna': request.form['cth_preop'],
                     'LICZBA CYKLI': int(request.form['cycles'])
                 }
-                
                 print("[DEBUG] Input data recieved :")
                 print(f'{input_data}')
 
-                model_name = request.form.get('model', 'Random Forest')
-                print(f"[DEBUG] Attempting prediction with {model_name}")
+                # Make predictions with all models
+                model_names = ['Random Forest', 'XGBoost', 'CatBoost']
+                predictions_created = 0
+                for model_name in model_names:
+                    try:
+                        result = ml_model.predict(input_data, model_name)
+                        
+                        prediction = Prediction(
+                            patient_id=patient.id,
+                            probability=result['probability'],
+                            model_used=model_name,
+                            interpretation=result['interpretation'],
+                            top_factors=result['vars_importance']
+                        )
+                        db.session.add(prediction)
+                        predictions_created += 1
+                    except Exception as e:
+                        print(f"Error predicting with {model_name}: {str(e)}")
+                        continue
 
-                # print("DEBUG - Features expected by model:", ml_model.feature_names)
-                # print("DEBUG - Features being sent:", list(input_data.keys()))
-
-                # Ensure all features are in correct order
-                '''
-                ordered_input = []
-                for feature in ml_model.feature_names:
-                    if feature in input_data:
-                        ordered_input.append(input_data[feature])
-                    else:
-                        print(f"Missing feature: {feature}")
-                        ordered_input.append(None)  # Or appropriate default
-
-                print("DEBUG - Ordered input:", ordered_input)
-                '''
-                result = ml_model.predict(input_data, model_name)
-                print("[DEBUG] Prediction successful")
-                
-                # Store prediction
-                prediction = Prediction(
-                    patient_id=patient.id,
-                    probability=result['probability'],
-                    model_used=model_name,
-                    interpretation=result['interpretation'],
-                    top_factors=result['vars_importance']
-                )
-                db.session.add(prediction)
+                if predictions_created == 0:
+                    raise Exception("Failed to create any predictions")
                 
                 db.session.commit()
                 flash('New patient and prediction added successfully!', 'success')
