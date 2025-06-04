@@ -3,6 +3,7 @@ from app import create_app
 from models import db, Patient, Prediction
 from ml_models import MLModel
 import traceback
+import json  # Add this import
 
 app = create_app()
 ml_model = MLModel()
@@ -23,10 +24,11 @@ def process_csv_row(row):
             processed[key] = row[key]
     
     # Add default values for new fields
-    processed['leukocytes'] = None  # Default value, adjust as needed
-    processed['pni_float'] = None  # Default value, adjust as needed
+    processed['leukocytes'] = None
+    processed['pni_float'] = None
     
     return processed
+
 def insert_patients_from_csv(csv_path):
     with app.app_context():
         try:
@@ -37,7 +39,7 @@ def insert_patients_from_csv(csv_path):
                     try:
                         processed_row = process_csv_row(row)
                         
-                        # Create patient
+                        # Create patient (add new fields)
                         patient = Patient(
                             gender=processed_row['PŁEĆ'],
                             weight=processed_row['waga'],
@@ -55,11 +57,13 @@ def insert_patients_from_csv(csv_path):
                             GRADING=processed_row['GRADING'],
                             Lauren=processed_row['Lauren'],
                             CTH_preop=processed_row['CTH przedoperacyjna'],
-                            cycles_number=int(processed_row['LICZBA CYKLI'])
+                            cycles_number=int(processed_row['LICZBA CYKLI']),
+                            leukocytes=processed_row['leukocytes'],
+                            pni_float=processed_row['pni_float']
                         )
                         
                         db.session.add(patient)
-                        db.session.flush()  # Get the ID before commit
+                        db.session.flush()
                         
                         # Prepare input data for prediction
                         input_data = {
@@ -88,16 +92,22 @@ def insert_patients_from_csv(csv_path):
                             try:
                                 result = ml_model.predict(input_data, model_name)
                                 
+                                # Convert numpy floats to Python floats for JSON serialization
+                                all_probs = {k: float(v) for k, v in result['all_probabilities'].items()}
+                                
                                 prediction = Prediction(
                                     patient_id=patient.id,
-                                    probability=result['probability'],
+                                    probability=float(result['probability']),  # Ensure this is Python float
                                     model_used=model_name,
+                                    grade=result['grade'],
                                     interpretation=result['interpretation'],
-                                    top_factors=result['vars_importance']
+                                    top_factors=result['vars_importance'],
+                                    all_probabilities=json.dumps(all_probs)  # Use converted dict
                                 )
                                 db.session.add(prediction)
                             except Exception as e:
                                 print(f"Error predicting with {model_name} for patient {patient.id}: {str(e)}")
+                                print(traceback.format_exc())  # Add this to see full traceback
                                 continue
                         
                         db.session.commit()

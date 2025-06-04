@@ -4,6 +4,7 @@ import os
 from ml_models import MLModel  
 from flask_migrate import Migrate
 import traceback
+import json
 
 ml_model = MLModel()
 
@@ -14,6 +15,14 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cancer_ops.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'dev'  # Change in production
+
+    # filter
+    @app.template_filter('fromjson')
+    def fromjson_filter(value):
+        try:
+            return json.loads(value)
+        except (TypeError, json.JSONDecodeError):
+            return {}
     
     # Initialize database
     db.init_app(app)
@@ -200,7 +209,8 @@ def create_app():
                             probability=result['probability'],
                             model_used=model_name,
                             interpretation=result['interpretation'],
-                            top_factors=result['vars_importance']
+                            top_factors=result['vars_importance'],
+                            grade=result['grade']
                         )
                         db.session.add(prediction)
                         predictions_created += 1

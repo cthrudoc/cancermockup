@@ -763,3 +763,37 @@ h1 {
 
 .probability-gauge { outline: 1px solid green; }
 .gauge-fill { outline: 1px solid blue; }
+
+/* Add to styles.css */
+.risk-very-high {
+    background-color: rgba(142, 36, 170, 0.1);
+    color: #8e24aa;
+}
+
+/* Update the gauge colors for grades */
+.risk-low .gauge-fill { background: linear-gradient(to right, #4CAF50, #2E7D32); }
+.risk-moderate-risk .gauge-fill { background: linear-gradient(to right, #FFC107, #FF9800); }
+.risk-high-risk .gauge-fill { background: linear-gradient(to right, #F44336, #C62828); }
+.risk-very-high-risk .gauge-fill { background: linear-gradient(to right, #8e24aa, #6a1b9a); }
+
+/* Style for probability breakdown */
+.probability-breakdown {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--medium-gray);
+}
+
+.probability-breakdown h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.probability-breakdown ul {
+    list-style-type: none;
+}
+
+.probability-breakdown li {
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}

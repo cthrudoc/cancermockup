@@ -37,6 +37,8 @@ class Prediction(db.Model):
     model_used = db.Column(db.String(50), nullable=False)
     interpretation = db.Column(db.String(50), nullable=False)
     top_factors = db.Column(db.JSON)  # Stores list of important factors
+    all_probabilities = db.Column(db.JSON) # field for grade probabilities
+    grade = db.Column(db.String(2))
 
     clinician_agreement = db.Column(db.String(20))  # 'agree', 'disagree', 'ambivalent'
     clinician_notes = db.Column(db.Text)

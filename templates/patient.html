@@ -158,26 +158,34 @@
                     {% for prediction in predictions %}
                     <div class="prediction-result">
                         <!-- Prediction Display -->
-                        <div class="risk-level risk-{{ prediction.interpretation|lower|replace(' ', '-') }}">
-                            <h3>{{ prediction.interpretation }} RISK</h3>
-                            <div class="probability-gauge">
-                                <div class="gauge-fill" style="width: {{ (prediction.probability * 100)|round(1) }}%"></div>
-                                <span class="probability-value">{{ (prediction.probability * 100)|round(1) }}%</span>
+                        <!-- In the prediction section of patient.html -->
+                        <div class="prediction-result">
+                            <!-- Prediction Display -->
+                            <div class="risk-level risk-{{ prediction.interpretation|lower|replace(' ', '-') }}">
+                                <h3>GRADE {{ prediction.grade }} - {{ prediction.interpretation }}</h3>
+                                <div class="probability-gauge">
+                                    <div class="gauge-fill" style="width: {{ (prediction.probability * 100)|round(1) }}%"></div>
+                                    <span class="probability-value">{{ (prediction.probability * 100)|round(1) }}%</span>
+                                </div>
+                                <p>Calculated with {{ prediction.model_used }}</p>
+                                
+                                <!-- Add probability breakdown -->
+                                <!--        
+                                {% if prediction.all_probabilities %}
+                                
+                                <div class="probability-breakdown">
+                                    <h4>Probability Breakdown:</h4>
+                                    <ul>
+                                        {% for grade, prob in prediction.all_probabilities|fromjson|dictsort %}
+                                        <li>Grade {{ grade }}: {{ (prob * 100)|round(1) }}%</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %}
+                                -->
+
                             </div>
-                            <p>Calculated with {{ prediction.model_used }}</p>
                         </div>
-                        
-                        {% if prediction.top_factors %}
-                        <div class="important-factors">
-                            <h4>Top Contributing Factors:</h4>
-                            <ul>
-                                {% for factor in prediction.top_factors %}
-                                <li>{{ factor }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        {% endif %}
-                        
                         <div class="clinician-feedback">
                             <h4>Clinical Assessment</h4>
                             <form method="POST" action="{{ url_for('save_feedback', prediction_id=prediction.id) }}">
