@@ -797,3 +797,28 @@ h1 {
     display: flex;
     justify-content: space-between;
 }
+
+/* Add these to your existing styles */
+.data-section {
+    margin-bottom: 25px;
+    background: rgba(245, 245, 245, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.data-section-title {
+    color: var(--primary-color);
+    font-size: 18px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+/* Enhance existing data-field style */
+.data-field {
+    margin-bottom: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}

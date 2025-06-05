@@ -10,138 +10,150 @@
     </a>
     
     <form method="POST" action="{{ url_for('new_patient') }}">
-        <!-- Patient Information Section -->
-        <div class="form-group">
-            <label for="gender">Gender</label>
-            <select id="gender" name="gender" required>
-                <option value="M" selected>Male</option>
-                <option value="K">Female</option>
-            </select>
-        </div>
+        <div class="form-columns">  
+            <!-- Left Column -->
+            <div class="form-column">
+                <!-- Patient Information -->
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="M" selected>Male</option>
+                        <option value="K">Female</option>
+                    </select>
+                </div>
 
-        <div class="form-group">
-            <label for="weight">Weight (kg)</label>
-            <input type="number" step="0.1" id="weight" name="weight" value="75.0" required>
-        </div>
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" step="0.1" id="weight" name="weight" value="75.0" required>
+                </div>
 
-        <div class="form-group">
-            <label for="height">Height (cm)</label>
-            <input type="number" step="0.1" id="height" name="height" value="170.0" required>
-        </div>
+                <div class="form-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" step="0.1" id="height" name="height" value="170.0" required>
+                </div>
 
-        <div class="form-group">
-            <label for="bmi">BMI</label>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <input type="number" step="0.01" id="bmi" name="bmi" value="25.95" required>
-                <button type="button" class="btn-back" onclick="calculateBMI()" style="padding: 8px 12px;">
-                    <i class="fas fa-calculator"></i> Calculate
-                </button>
+                <div class="form-group">
+                    <label for="bmi">BMI</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="number" step="0.01" id="bmi" name="bmi" value="25.95" required>
+                        <button type="button" class="btn-back" onclick="calculateBMI()" style="padding: 8px 12px;">
+                            <i class="fas fa-calculator"></i> Calculate
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="crp">CRP (mg/L)</label>
+                    <input type="number" step="0.1" id="crp" name="crp" value="5.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="alb">Albumin (g/dL)</label>
+                    <input type="number" step="0.1" id="alb" name="alb" value="4.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="wcc">WCC (×10⁹/L)</label>
+                    <input type="number" step="0.1" id="wcc" name="wcc" value="7.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="neu">Neutrophils (×10⁹/L)</label>
+                    <input type="number" step="0.1" id="neu" name="neu" value="4.5" required>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="total_protein">Total Protein (g/dL)</label>
+                    <input type="number" step="0.1" id="total_protein" name="total_protein" value="6.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="leukocytes">Total Leukocytes (×10⁹/L)</label>
+                    <input type="number" step="0.1" id="leukocytes" name="leukocytes" value="7.0">
+                </div>
+
+                <div class="form-group">
+                    <label for="pni_float">PNI Value</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="number" step="0.01" id="pni_float" name="pni_float" value="45.0">
+                        <button type="button" class="btn-back" onclick="calculatePNI()" style="padding: 8px 12px;">
+                            <i class="fas fa-calculator"></i> Calculate
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Prediction Parameters Section -->
+                <div class="form-group">
+                    <label for="age">Age at Operation</label>
+                    <input type="number" id="age" name="age" value="60" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pt">cT Stage</label>
+                    <select id="pt" name="pt" required>
+                        <option value="T1">T1</option>
+                        <option value="T2" selected>T2</option>
+                        <option value="T3">T3</option>
+                        <option value="T4">T4</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="pn">cN Stage</label>
+                    <select id="pn" name="pn" required>
+                        <option value="N0" selected>N0</option>
+                        <option value="N1">N1</option>
+                        <option value="N2">N2</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="pm">cM Stage</label>
+                    <select id="pm" name="pm" required>
+                        <option value="M0" selected>M0</option>
+                        <option value="M1">M1</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="crp">CRP (mg/L)</label>
-            <input type="number" step="0.1" id="crp" name="crp" value="5.0" required>
-        </div>
+        <!-- Bottom Row (Full Width) -->
+        <div class="form-row">  
+            <div class="form-group">
+                <label for="grading">Grading</label>
+                <select id="grading" name="grading" required>
+                    <option value="G1">G1</option>
+                    <option value="G2" selected>G2</option>
+                    <option value="G3">G3</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="alb">Albumin (g/dL)</label>
-            <input type="number" step="0.1" id="alb" name="alb" value="4.5" required>
-        </div>
+            <div class="form-group">
+                <label for="lauren">Lauren Type</label>
+                <select id="lauren" name="lauren" required>
+                    <option value="jelitowy" selected>Intestinal</option>
+                    <option value="rozsiany">Diffuse</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="wcc">WCC (×10⁹/L)</label>
-            <input type="number" step="0.1" id="wcc" name="wcc" value="7.5" required>
-        </div>
+            <div class="form-group">
+                <label for="cth_preop">Preoperative Chemotherapy</label>
+                <select id="cth_preop" name="cth_preop" required>
+                    <option value="nie" selected>No</option>
+                    <option value="tak">Yes</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="neu">Neutrophils (×10⁹/L)</label>
-            <input type="number" step="0.1" id="neu" name="neu" value="4.5" required>
-        </div>
-
-        <div class="form-group">
-            <label for="total_protein">Total Protein (g/dL)</label>
-            <input type="number" step="0.1" id="total_protein" name="total_protein" value="6.5" required>
-        </div>
-
-        <div class="form-group">
-            <label for="leukocytes">Total Leukocytes (×10⁹/L)</label>
-            <input type="number" step="0.1" id="leukocytes" name="leukocytes" value="7.0">
-        </div>
-
-        <div class="form-group">
-            <label for="pni_float">PNI Value</label>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <input type="number" step="0.01" id="pni_float" name="pni_float" value="45.0">
-                <button type="button" class="btn-back" onclick="calculatePNI()" style="padding: 8px 12px;">
-                    <i class="fas fa-calculator"></i> Calculate
-                </button>
+            <div class="form-group">
+                <label for="cycles">Number of Cycles</label>
+                <input type="number" id="cycles" name="cycles" value="0" required>
             </div>
         </div>
 
-        <!-- Prediction Parameters Section -->
-        <div class="form-group">
-            <label for="age">Age at Operation</label>
-            <input type="number" id="age" name="age" value="60" required>
-        </div>
-
-        <div class="form-group">
-            <label for="pt">cT Stage</label>
-            <select id="pt" name="pt" required>
-                <option value="T1">T1</option>
-                <option value="T2" selected>T2</option>
-                <option value="T3">T3</option>
-                <option value="T4">T4</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="pn">cN Stage</label>
-            <select id="pn" name="pn" required>
-                <option value="N0" selected>N0</option>
-                <option value="N1">N1</option>
-                <option value="N2">N2</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="pm">cM Stage</label>
-            <select id="pm" name="pm" required>
-                <option value="M0" selected>M0</option>
-                <option value="M1">M1</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="grading">Grading</label>
-            <select id="grading" name="grading" required>
-                <option value="G1">G1</option>
-                <option value="G2" selected>G2</option>
-                <option value="G3">G3</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="lauren">Lauren Type</label>
-            <select id="lauren" name="lauren" required>
-                <option value="jelitowy" selected>Intestinal</option>
-                <option value="rozsiany">Diffuse</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="cth_preop">Preoperative Chemotherapy</label>
-            <select id="cth_preop" name="cth_preop" required>
-                <option value="nie" selected>No</option>
-                <option value="tak">Yes</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="cycles">Number of Cycles</label>
-            <input type="number" id="cycles" name="cycles" value="0" required>
-        </div>
-        
+        <!-- Submit Button -->
         <div class="form-actions">
             <button type="submit" class="btn-submit">
                 <i class="fas fa-save"></i> Save Patient & Calculate Risk
