@@ -5,6 +5,10 @@ from ml_models import MLModel
 from flask_migrate import Migrate
 import traceback
 import json
+import io
+import csv
+from datetime import datetime
+from flask import Response
 
 ml_model = MLModel()
 
@@ -246,6 +250,74 @@ def create_app():
             db.session.commit()
             flash('Feedback saved successfully', 'success')
         return redirect(url_for('patient_detail', patient_id=prediction.patient_id))
+
+    @app.route('/export-patients')
+    def export_patients():
+        try:
+            # Query all patients with their predictions
+            patients = Patient.query.all()
+            
+            # Create CSV data
+            output = io.StringIO()
+            writer = csv.writer(output)
+            
+            # Write headers
+            writer.writerow([
+                'ID', 'Gender', 'Weight', 'Height', 'BMI', 'CRP', 'Albumin',
+                'WCC', 'Neutrophils', 'Total Protein', 'Leukocytes', 'PNI Value',
+                'pT Stage', 'pN Stage', 'pM Stage', 'Grading', 'Lauren Type',
+                'Pre-op Chemo', 'Cycles', 'Model Used', 'Predicted Grade',
+                'Probability', 'Interpretation', 'Top Factors'
+            ])
+            
+            # Write patient data
+            for patient in patients:
+                for prediction in patient.predictions:
+                    writer.writerow([
+                        patient.id,
+                        patient.gender,
+                        patient.weight,
+                        patient.height,
+                        patient.bmi,
+                        patient.CRP,
+                        patient.Alb,
+                        patient.WCC,
+                        patient.NEU,
+                        patient.total_protein,
+                        patient.leukocytes or '',
+                        patient.pni_float or '',
+                        patient.pT,
+                        patient.pN,
+                        patient.pM,
+                        patient.GRADING,
+                        patient.Lauren,
+                        patient.CTH_preop,
+                        patient.cycles_number,
+                        prediction.model_used,
+                        prediction.grade,
+                        prediction.probability,
+                        prediction.interpretation,
+                        ' | '.join(prediction.top_factors) if prediction.top_factors else ''
+                    ])
+            
+            # Prepare response
+            output.seek(0)
+            date_str = datetime.now().strftime("%Y%m%d")
+            print(f"CSV Data:\n{output.getvalue()}")  
+            return Response(
+                output,
+                mimetype="text/csv",
+                headers={
+                    "Content-Disposition": f"attachment;filename=patients_export_{date_str}.csv",
+                    "Content-type": "text/csv"
+                }
+            )
+        
+        except Exception as e:
+            print(f"Export Error: {str(e)}")  # Add this line
+            traceback.print_exc()  # Add this to see full tracebac
+            flash(f'Export error: {str(e)}', 'error')
+            return redirect(url_for('index'))
 
     return app
 

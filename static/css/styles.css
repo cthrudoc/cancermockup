@@ -827,3 +827,25 @@ h1 {
     text-align: center;
     padding: 8px;
 }
+
+.btn-export {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+    transition: all 0.2s;
+}
+
+.btn-export:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.btn-export i {
+    margin-right: 5px;
+}
