@@ -206,11 +206,13 @@ def create_app():
                         
                         prediction = Prediction(
                             patient_id=patient.id,
-                            probability=result['probability'],
+                            probability=float(result['probability']),
                             model_used=model_name,
                             interpretation=result['interpretation'],
                             top_factors=result['vars_importance'],
-                            grade=result['grade']
+                            grade=result['grade'],
+                            all_probabilities=json.dumps({
+                                k: float(v) for k, v in result['all_probabilities'].items()}),
                         )
                         db.session.add(prediction)
                         predictions_created += 1

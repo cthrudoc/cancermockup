@@ -11,41 +11,41 @@
 </header>
 
 <div class="patient-profile">
-    <div class="patient-data">
-    <!-- Personal & Biometrics Section -->
-        <div class="data-section">
-        <h3 class="data-section-title">Patient Details</h3>
-        <div class="data-columns">
-            <div class="data-subcolumn">
-                <div class="data-field">
-                    <label>Gender</label>
-                    <div class="editable-field">{{ patient.gender }}</div>
-                </div>
-                <div class="data-field">
-                    <label>Weight</label>
-                    <div class="editable-field">{{ patient.weight }} kg</div>
-                </div>
-                <div class="data-field">
-                    <label>Height</label>
-                    <div class="editable-field">{{ patient.height }} cm</div>
-                </div>
-            </div>
-            <div class="data-subcolumn">
-                <div class="data-field">
-                    <label>BMI</label>
-                    <div class="editable-field">{{ patient.bmi }}</div>
-                </div>
-                <div class="data-field">
-                    <label>PNI Status</label>
-                    <div class="editable-field">{{ "High" if patient.PNI else "Low" }}</div>
-                </div>
-                <div class="data-field">
-                    <label>PNI Value</label>
-                    <div class="editable-field">{{ patient.pni_float or 'N/A' }}</div>
-                </div>
-            </div>
-        </div>
-    </div>
+  <div class="patient-data">
+  <!-- personal & biometrics section -->
+    <div class="data-section">
+      <h3 class="data-section-title">patient details</h3>
+      <div class="data-columns">
+          <div class="data-subcolumn">
+              <div class="data-field">
+                  <label>gender</label>
+                  <div class="editable-field">{{ patient.gender }}</div>
+              </div>
+              <div class="data-field">
+                  <label>weight</label>
+                  <div class="editable-field">{{ patient.weight }} kg</div>
+              </div>
+              <div class="data-field">
+                  <label>height</label>
+                  <div class="editable-field">{{ patient.height }} cm</div>
+              </div>
+          </div>
+          <div class="data-subcolumn">
+              <div class="data-field">
+                  <label>bmi</label>
+                  <div class="editable-field">{{ patient.bmi }}</div>
+              </div>
+              <div class="data-field">
+                  <label>pni status</label>
+                  <div class="editable-field">{{ "high" if patient.pni else "low" }}</div>
+              </div>
+              <div class="data-field">
+                  <label>pni value</label>
+                  <div class="editable-field">{{ patient.pni_float or 'N/A' }}</div>
+              </div>
+          </div>
+      </div>
+  </div>
 
     <!-- Lab Results Section -->
     <div class="data-section">
@@ -133,80 +133,86 @@
     </div>
 </div>
 
-            <!-- Right Column (Prediction) -->
-            <div class="prediction-data">
-                {% if predictions %}
-                    {% for prediction in predictions %}
-                    <div class="prediction-result">
-                        <!-- Prediction Display -->
-                        <!-- In the prediction section of patient.html -->
-                        <div class="prediction-result">
-                            <!-- Prediction Display -->
-                            <div class="risk-level risk-{{ prediction.interpretation|lower|replace(' ', '-') }}">
-                                <h3>GRADE {{ prediction.grade }} - {{ prediction.interpretation }}</h3>
-                                <div class="probability-gauge">
-                                    <div class="gauge-fill" style="width: {{ (prediction.probability * 100)|round(1) }}%"></div>
-                                    <span class="probability-value">{{ (prediction.probability * 100)|round(1) }}%</span>
+<!-- Right Column (Prediction) -->
+<div class="prediction-data">
+    {% if predictions %}
+        {% for prediction in predictions %}
+        <div class="prediction-result">
+            <!-- Prediction Display -->
+            <!-- In the prediction section of patient.html -->
+            <div class="prediction-result">
+                <!-- Prediction Display -->
+                <div class="risk-level risk-{{ prediction.interpretation|lower|replace(' ', '-') }}">
+                    <h3>GRADE {{ prediction.grade }} - {{ prediction.interpretation }}</h3>
+                    <div class="probability-gauge">
+                        <div class="gauge-fill" style="width: {{ (prediction.probability * 100)|round(1) }}%"></div>
+                        <span class="probability-value">{{ (prediction.probability * 100)|round(1) }}%</span>
+                    </div>
+                    <p>Calculated with {{ prediction.model_used }}</p>
+                    
+                    {% if prediction.all_probabilities %}
+                    <div class="data-section">
+                        <h3 class="data-section-title">Probability Breakdown</h3>
+                        <div class="data-columns">
+                            {% for grade, prob in prediction.all_probabilities|fromjson|dictsort %}
+                            <div class="data-subcolumn">
+                                <div class="data-field">
+                                    <label>Grade {{ grade }}</label>
+                                    <div class="editable-field probability-grade probability-grade-{{ grade }}">
+                                        {{ (prob * 100)|round(1) }}%
+                                    </div>
                                 </div>
-                                <p>Calculated with {{ prediction.model_used }}</p>
-                                
-                                <!-- Add probability breakdown -->
-                                <!--        
-                                {% if prediction.all_probabilities %}
-                                
-                                <div class="probability-breakdown">
-                                    <h4>Probability Breakdown:</h4>
-                                    <ul>
-                                        {% for grade, prob in prediction.all_probabilities|fromjson|dictsort %}
-                                        <li>Grade {{ grade }}: {{ (prob * 100)|round(1) }}%</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                                {% endif %}
-                                -->
-
                             </div>
+                            {% if loop.index % 2 == 0 and not loop.last %}
                         </div>
-                        <div class="clinician-feedback">
-                            <h4>Clinical Assessment</h4>
-                            <form method="POST" action="{{ url_for('save_feedback', prediction_id=prediction.id) }}">
-                                <div class="feedback-buttons">
-                                    <button type="submit" name="agreement" value="agree" 
-                                            class="{% if prediction.clinician_agreement == 'agree' %}active{% endif %}">
-                                        <i class="fas fa-check-circle"></i> Agree
-                                    </button>
-                                    <button type="submit" name="agreement" value="disagree"
-                                            class="{% if prediction.clinician_agreement == 'disagree' %}active{% endif %}">
-                                        <i class="fas fa-times-circle"></i> Disagree
-                                    </button>
-                                    <button type="submit" name="agreement" value="ambivalent"
-                                            class="{% if prediction.clinician_agreement == 'ambivalent' %}active{% endif %}">
-                                        <i class="fas fa-question-circle"></i> Ambivalent
-                                    </button>
-                                </div>
-                                
-                                <div class="feedback-notes">
-                                    <textarea name="clinician_notes" placeholder="Enter your clinical reasoning...">
-                                        {{ prediction.clinician_notes or '' }}
-                                    </textarea>
-                                    <button type="submit" class="btn-save-notes">
-                                        <i class="fas fa-save"></i> Save Notes
-                                    </button>
-                                </div>
-                            </form>
+                        <div class="data-columns">
+                            {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="no-prediction">
-                        <p>No prediction available for this patient</p>
-                    </div>
-                {% endif %}
-
-
+{% endif %}
+                </div>
             </div>
-
+            <div class="clinician-feedback">
+                <h4>Clinical Assessment</h4>
+                <form method="POST" action="{{ url_for('save_feedback', prediction_id=prediction.id) }}">
+                    <div class="feedback-buttons">
+                        <button type="submit" name="agreement" value="agree" 
+                                class="{% if prediction.clinician_agreement == 'agree' %}active{% endif %}">
+                            <i class="fas fa-check-circle"></i> Agree
+                        </button>
+                        <button type="submit" name="agreement" value="disagree"
+                                class="{% if prediction.clinician_agreement == 'disagree' %}active{% endif %}">
+                            <i class="fas fa-times-circle"></i> Disagree
+                        </button>
+                        <button type="submit" name="agreement" value="ambivalent"
+                                class="{% if prediction.clinician_agreement == 'ambivalent' %}active{% endif %}">
+                            <i class="fas fa-question-circle"></i> Ambivalent
+                        </button>
+                    </div>
+                    
+                    <div class="feedback-notes">
+                        <textarea name="clinician_notes" placeholder="Enter your clinical reasoning...">
+                            {{ prediction.clinician_notes or '' }}
+                        </textarea>
+                        <button type="submit" class="btn-save-notes">
+                            <i class="fas fa-save"></i> Save Notes
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-prediction">
+            <p>No prediction available for this patient</p>
+        </div>
+    {% endif %}
+
+
+</div>
+
+</div>
         
         
 
