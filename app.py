@@ -33,8 +33,13 @@ def create_app():
     migrate = Migrate(app, db)
     
     # Routes
+
     @app.route('/')
-    def index():
+    def landing_page():
+        return render_template('title_page.html')
+
+    @app.route('/patients')
+    def patients():
         search_query = request.args.get('search', '')
         page = request.args.get('page', 1, type=int)
         per_page = 10

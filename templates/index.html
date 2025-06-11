@@ -7,7 +7,7 @@
     <h1>Patient List</h1>
     <div class="search-container">
         <i class="fas fa-search"></i>
-        <form method="get" action="{{ url_for('index') }}">
+        <form method="get" action="{{ url_for('patients') }}">
             <input type="text" name="search" placeholder="Search patients..." 
                    value="{{ search_query }}" id="searchInput">
         </form>
@@ -59,7 +59,7 @@
 
 <div class="pagination">
     {% if patients.has_prev %}
-        <a href="{{ url_for('index', page=patients.prev_num, search=search_query) }}" 
+        <a href="{{ url_for('patients', page=patients.prev_num, search=search_query) }}" 
            class="pagination-button">
             <i class="fas fa-chevron-left"></i>
         </a>
@@ -71,7 +71,7 @@
 
     {% for page_num in patients.iter_pages() %}
         {% if page_num %}
-            <a href="{{ url_for('index', page=page_num, search=search_query) }}" 
+            <a href="{{ url_for('patients', page=page_num, search=search_query) }}" 
                class="pagination-button {% if page_num == patients.page %}active{% endif %}">
                 {{ page_num }}
             </a>
@@ -81,7 +81,7 @@
     {% endfor %}
 
     {% if patients.has_next %}
-        <a href="{{ url_for('index', page=patients.next_num, search=search_query) }}" 
+        <a href="{{ url_for('patients', page=patients.next_num, search=search_query) }}" 
            class="pagination-button">
             <i class="fas fa-chevron-right"></i>
         </a>
