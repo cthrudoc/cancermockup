@@ -85,7 +85,10 @@ def create_app():
                             search_query=search_query,
                             sort_by=sort_by,
                             sort_order=sort_order)
-    
+    @app.route('/title-page')
+    def title_page():
+        return render_template('title_page.html')
+
     @app.route('/patient/<int:patient_id>')
     def patient_detail(patient_id):
         patient = Patient.query.get_or_404(patient_id)

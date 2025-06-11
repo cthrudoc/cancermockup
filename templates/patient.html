@@ -142,22 +142,25 @@
             <!-- In the prediction section of patient.html -->
             <div class="prediction-result">
                 <!-- Prediction Display -->
-                <div class="risk-level risk-{{ prediction.interpretation|lower|replace(' ', '-') }}">
+                
+                <div class="risk-level">
+                <!--
                     <h3>GRADE {{ prediction.grade }} - {{ prediction.interpretation }}</h3>
                     <div class="probability-gauge">
                         <div class="gauge-fill" style="width: {{ (prediction.probability * 100)|round(1) }}%"></div>
                         <span class="probability-value">{{ (prediction.probability * 100)|round(1) }}%</span>
                     </div>
+                risk-{{ prediction.interpretation|lower|replace(' ', '-') }}
                     <p>Calculated with {{ prediction.model_used }}</p>
-                    
+                -->
                     {% if prediction.all_probabilities %}
                     <div class="data-section">
-                        <h3 class="data-section-title">Probability Breakdown</h3>
+                        <h3 class="data-section-title">Probability Breakdown - Calculated with {{ prediction.model_used }}</h3>
                         <div class="data-columns">
                             {% for grade, prob in prediction.all_probabilities|fromjson|dictsort %}
                             <div class="data-subcolumn">
                                 <div class="data-field">
-                                    <label>Grade {{ grade }}</label>
+                                    <label>Grade {{ grade }} risk</label>
                                     <div class="editable-field probability-grade probability-grade-{{ grade }}">
                                         {{ (prob * 100)|round(1) }}%
                                     </div>

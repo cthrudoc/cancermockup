@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="title-page-container">
+    <!-- Logo Row -->
+    <div class="logo-row">
+        <img src="{{ url_for('static', filename='images/logo1.png') }}" alt="Logo1" class="title-logo">
+        <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="Logo2" class="title-logo">
+    </div>
+
+    <!-- Button Column -->
+    <div class="title-button-column">
+        <a href="{{ url_for('new_patient') }}" class="title-button">
+            <i class="fas fa-user-plus"></i> ADD PATIENT
+        </a>
+        <a href="{{ url_for('index') }}" class="title-button">
+            <i class="fas fa-list-ul"></i> PATIENT LIST
+        </a>
+        <a href="{{ url_for('export_patients') }}" class="title-button">
+            <i class="fas fa-file-download"></i> DOWNLOAD FILES
+        </a>
+    </div>
+</div>
+{% endblock %}
