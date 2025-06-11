@@ -874,6 +874,12 @@ h1 {
     object-fit: contain;
 }
 
+.title-logo-smol {
+    max-height: 120px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
 .title-button-column {
     display: flex;
     flex-direction: column;
